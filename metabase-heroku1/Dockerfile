@@ -1,9 +1,11 @@
 FROM metabase/metabase:latest
 
-# Install PostgreSQL client
+# Install PostgreSQL client with proper error handling
 RUN apt-get update && \
-    apt-get install -y postgresql-client && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y postgresql-client-15 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    which psql || (echo "psql installation failed" && exit 1)
 
 # Set environment variables
 ENV MB_DB_TYPE=postgres
